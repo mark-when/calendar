@@ -8,3 +8,8 @@
   padding: 0;
   margin: 0;
 }
+
+:root {
+  --fc-border-color: rgba(155, 155, 155, 0.1);
+  --fc-today-bg-color: rgb(123 112 229 / 20%);
+}
