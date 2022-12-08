@@ -10,6 +10,6 @@
 }
 
 :root {
-  --fc-border-color: rgba(155, 155, 155, 0.1);
-  --fc-today-bg-color: rgb(123 112 229 / 20%);
+  --fc-border-color: rgba(155, 155, 155, 0.1) !important;
+  --fc-today-bg-color: rgb(123 112 229 / 20%) !important;
 }
