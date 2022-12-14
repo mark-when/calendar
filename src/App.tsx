@@ -7,12 +7,12 @@ import {
   EventInput,
   EventHoveringArg,
   EventClickArg,
+  DateSelectArg,
 } from "@fullcalendar/core";
 import { iterate, isEventNode } from "@markwhen/parser/lib/Noder";
 import type { SomeNode } from "@markwhen/parser/lib/Node";
 import "./App.css";
-import { Fragment, useEffect } from "react";
-import { toInnerHtml } from "./markwhen/utils";
+import { createRef, Fragment, useEffect } from "react";
 import { EventPath } from "./markwhen/useLpc";
 
 const eqPath = (p1?: number[], p2?: number[]) =>
@@ -26,6 +26,7 @@ function App() {
     setHoveringPath,
     setDetailPath,
     showInEditor,
+    newEvent,
   ] = useStore((s) => {
     const eventColor = (node: SomeNode) => {
       const ourTags = isEventNode(node)
@@ -68,6 +69,7 @@ function App() {
       s.setHoveringPath,
       s.setDetailPath,
       s.showInEditor,
+      s.newEvent,
     ];
   });
 
@@ -98,9 +100,15 @@ function App() {
   //   console.log(e);
   // };
 
-  // const select = (e) => {
-  //   console.log(e);
-  // };
+  const select = (selection: DateSelectArg) => {
+    newEvent(
+      { fromDateTimeIso: selection.startStr, toDateTimeIso: selection.endStr },
+      false
+    );
+    calendarRef.current!.getApi().unselect();
+  };
+
+  const calendarRef = createRef<FullCalendar>();
 
   return (
     <div className={`h-full w-full ${dark ? "dark" : ""}`}>
@@ -108,6 +116,7 @@ function App() {
         className={`h-full w-full dark:bg-slate-800 dark:text-slate-100 text-slate-900 bg-slate-50 calendar-container`}
       >
         <FullCalendar
+          ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           editable={true}
           initialView={"dayGridMonth"}
@@ -124,7 +133,8 @@ function App() {
           eventClick={eventClick}
           eventClassNames={"cursor-pointer"}
           // dateClick={dateClick}
-          // selectable={true}
+          selectable={true}
+          select={select}
         />
       </div>
     </div>

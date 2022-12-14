@@ -1,5 +1,9 @@
 import type { Node, NodeArray } from "@markwhen/parser/lib/Node";
-import type { Timeline } from "@markwhen/parser/lib/Types";
+import type {
+  DateRangeIso,
+  DateTimeGranularity,
+  Timeline,
+} from "@markwhen/parser/lib/Types";
 
 export type EventPaths = { [pathType in EventPath["type"]]?: EventPath };
 
@@ -35,8 +39,13 @@ interface MessageTypes {
   state: State;
   setHoveringPath: EventPath;
   setDetailPath: EventPath;
-  key: string,
+  key: string;
   showInEditor: EventPath;
+  newEvent: {
+    dateRangeIso: DateRangeIso;
+    granularity?: DateTimeGranularity;
+    immediate: boolean;
+  };
 }
 
 type MessageType = keyof MessageTypes;
