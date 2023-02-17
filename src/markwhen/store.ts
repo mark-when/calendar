@@ -14,7 +14,7 @@ type Actions = {
   newEvent: (dateRange: DateRangeIso, immediate: boolean) => void;
 };
 const stateAndTransformedEvents = {}
-export const useStore = create<State & Actions & { events: EventInput[] }>(
+export const useStore = create<State & Actions & { events?: EventInput[] }>(
   (set) => {
     const { postRequest } = useLpc({
       state: (newState) => {
