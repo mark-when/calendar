@@ -12,66 +12,35 @@ import {
 import { iterate, isEventNode } from "@markwhen/parser/lib/Noder";
 import type { SomeNode } from "@markwhen/parser/lib/Node";
 import "./App.css";
-import { createRef, Fragment, useEffect } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import { EventPath } from "./markwhen/useLpc";
+import { produce } from "immer";
+import shallow from "zustand/shallow";
 
 const eqPath = (p1?: number[], p2?: number[]) =>
   !!p1 && p2 && p1.join(",") === p2.join(",");
-
 function App() {
   const [
-    events,
-    dark,
     requestStateUpdate,
     setHoveringPath,
     setDetailPath,
     showInEditor,
     newEvent,
-  ] = useStore((s) => {
-    const eventColor = (node: SomeNode) => {
-      const ourTags = isEventNode(node)
-        ? node.value.eventDescription.tags
-        : node.tags;
-      return ourTags ? s.markwhen?.page?.parsed?.tags[ourTags[0]] : undefined;
-    };
+  ] = useStore(
+    (s) => {
+      return [
+        s.requestStateUpdate,
+        s.setHoveringPath,
+        s.setDetailPath,
+        s.showInEditor,
+        s.newEvent,
+      ];
+    },
+    (a, b) => true
+  );
 
-    let events = [] as EventInput[];
-    const transformed = s.markwhen?.page?.transformed;
-    if (transformed) {
-      for (const { node, path } of iterate(transformed)) {
-        if (isEventNode(node)) {
-          const color = eventColor(node) || "31, 32, 35";
-          const hovering = eqPath(
-            s.app?.hoveringPath?.pageFiltered?.path,
-            path
-          );
-          const detail = eqPath(s.app?.detailPath?.path, path);
-          const dark = s.app?.isDark;
-          events.push({
-            id: path.join(","),
-            start: node.value.dateRangeIso.fromDateTimeIso,
-            end: node.value.dateRangeIso.toDateTimeIso,
-            title: `${node.value.eventDescription.eventDescription}`,
-            backgroundColor: `rgba(${color}, ${
-              hovering || detail ? 0.95 : 0.8
-            })`,
-            borderColor:
-              hovering || detail ? (dark ? "white" : "black") : `rgb(${color})`,
-            dateText: node.value.dateText,
-          });
-        }
-      }
-    }
-    return [
-      events,
-      s.app?.isDark,
-      s.requestStateUpdate,
-      s.setHoveringPath,
-      s.setDetailPath,
-      s.showInEditor,
-      s.newEvent,
-    ];
-  });
+  const dark = useStore((s) => s.app?.isDark);
+  const events = useStore((s) => s.events, shallow);
 
   useEffect(() => {
     // We only want an initial update, we do not want to call this on every render
@@ -95,10 +64,6 @@ function App() {
     setDetailPath(path);
     showInEditor(path);
   };
-
-  // const dateClick = (e) => {
-  //   console.log(e);
-  // };
 
   const select = (selection: DateSelectArg) => {
     newEvent(
