@@ -1,7 +1,6 @@
 {
-  "name": "calendar",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@markwhen/calendar",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port=5175",
@@ -14,7 +13,8 @@
     "@fullcalendar/interaction": "^6.0.0-beta.3",
     "@fullcalendar/react": "^6.0.0-beta.3",
     "@fullcalendar/timegrid": "^6.0.0-beta.3",
-    "@markwhen/parser": "^0.5.1",
+    "@markwhen/parser": "^0.6.4",
+    "@markwhen/view-client": "^1.0.10",
     "immer": "^9.0.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,6 +28,8 @@
     "postcss": "^8.4.19",
     "tailwindcss": "^3.2.4",
     "typescript": "^4.6.4",
-    "vite": "^3.2.3"
-  }
+    "vite": "^3.2.3",
+    "vite-plugin-singlefile": "^0.13.3"
+  },
+  "files": ["dist/index.html"]
 }

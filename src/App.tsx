@@ -4,17 +4,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {
-  EventInput,
   EventHoveringArg,
   EventClickArg,
   DateSelectArg,
 } from "@fullcalendar/core";
-import { iterate, isEventNode } from "@markwhen/parser/lib/Noder";
-import type { SomeNode } from "@markwhen/parser/lib/Node";
 import "./App.css";
 import { createRef, useEffect, useRef, useState } from "react";
-import { EventPath } from "./markwhen/useLpc";
-import { produce } from "immer";
+import { EventPath } from "@markwhen/view-client/dist/paths";
 import shallow from "zustand/shallow";
 
 const eqPath = (p1?: number[], p2?: number[]) =>

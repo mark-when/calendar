@@ -1,5 +1,6 @@
 import create from "zustand";
-import { eqPath, EventPath, State, useLpc } from "./useLpc";
+import { State, useLpc } from "@markwhen/view-client";
+import { equivalentPaths, EventPath } from "@markwhen/view-client/dist/paths";
 import { produce } from "immer";
 import { DateRangeIso, DateTimeGranularity } from "@markwhen/parser/lib/Types";
 import { EventInput } from "@fullcalendar/core";
@@ -13,8 +14,9 @@ type Actions = {
   showInEditor: (path?: EventPath) => void;
   newEvent: (dateRange: DateRangeIso, immediate: boolean) => void;
 };
-const stateAndTransformedEvents = {}
+const stateAndTransformedEvents = {};
 export const useStore = create<State & Actions & { events?: EventInput[] }>(
+  // @ts-ignore
   (set) => {
     const { postRequest } = useLpc({
       state: (newState) => {
@@ -35,11 +37,14 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
               for (const { node, path } of iterate(transformed)) {
                 if (isEventNode(node)) {
                   const color = eventColor(node) || "31, 32, 35";
-                  const hovering = eqPath(
-                    newState.app?.hoveringPath?.pageFiltered?.path,
-                    path
+                  const hovering = equivalentPaths(
+                    newState.app?.hoveringPath?.pageFiltered,
+                    { type: "pageFiltered", path }
                   );
-                  const detail = eqPath(newState.app?.detailPath?.path, path);
+                  const detail = equivalentPaths(newState.app?.detailPath, {
+                    type: "pageFiltered",
+                    path,
+                  });
                   const dark = newState.app?.isDark;
                   events.push({
                     id: path.join(","),
