@@ -14,7 +14,7 @@
     "@fullcalendar/react": "^6.0.0-beta.3",
     "@fullcalendar/timegrid": "^6.0.0-beta.3",
     "@markwhen/parser": "^0.6.4",
-    "@markwhen/view-client": "^1.0.10",
+    "@markwhen/view-client": "^1.0.11",
     "immer": "^9.0.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -31,5 +31,7 @@
     "vite": "^3.2.3",
     "vite-plugin-singlefile": "^0.13.3"
   },
-  "files": ["dist/index.html"]
+  "files": [
+    "dist/index.html"
+  ]
 }

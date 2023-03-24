@@ -1,5 +1,5 @@
 import create from "zustand";
-import { State, useLpc } from "@markwhen/view-client";
+import { AppState, MarkwhenState, State, useLpc } from "@markwhen/view-client";
 import { equivalentPaths, EventPath } from "@markwhen/view-client/dist/paths";
 import { produce } from "immer";
 import { DateRangeIso, DateTimeGranularity } from "@markwhen/parser/lib/Types";
@@ -16,8 +16,21 @@ type Actions = {
 };
 const stateAndTransformedEvents = {};
 export const useStore = create<State & Actions & { events?: EventInput[] }>(
-  // @ts-ignore
   (set) => {
+    let initial = {
+      app: {
+        isDark: false,
+        pageIndex: 0,
+      } as AppState,
+      markwhen: {
+        parsed: [],
+        page: {
+          parsed: undefined,
+          transformed: undefined,
+        },
+      } as MarkwhenState,
+      events: [] as EventInput[],
+    };
     const { postRequest } = useLpc({
       state: (newState) => {
         set(
@@ -65,7 +78,8 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
                 }
               }
             }
-            return { ...newState, events };
+            initial = { ...newState, events };
+            return initial;
           })
         );
       },
@@ -95,6 +109,7 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
       setDetailPath,
       showInEditor,
       newEvent,
+      ...initial,
     };
   }
 );
