@@ -40,12 +40,12 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
                 ? node.value.eventDescription.tags
                 : node.tags;
               return ourTags
-                ? newState.markwhen?.page?.parsed?.tags[ourTags[0]]
+                ? newState.markwhen?.parsed?.[0].tags[ourTags[0]]
                 : undefined;
             };
 
             let events = [] as EventInput[];
-            const transformed = newState.markwhen?.page?.transformed;
+            const transformed = newState.markwhen?.transformed;
             if (transformed) {
               for (const { node, path } of iterate(transformed)) {
                 if (isEventNode(node)) {
