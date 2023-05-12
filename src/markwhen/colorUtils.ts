@@ -27,7 +27,7 @@ export const HUMAN_COLORS = [
 ];
 
 export function hexToRgb(hex: string): string | undefined {
-  hex = hex.replace("#", "");
+  hex = hex.replace("#", "").replace(')', '');
   const isShortHex = hex.length === 3;
   var r = parseInt(
     isShortHex ? hex.slice(0, 1).repeat(2) : hex.slice(0, 2),

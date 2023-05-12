@@ -21,6 +21,7 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
       app: {
         isDark: false,
         pageIndex: 0,
+        colorMap: {},
       } as AppState,
       markwhen: {
         parsed: [],
@@ -40,7 +41,7 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
                 ? node.value.eventDescription.tags
                 : node.tags;
               return ourTags
-                ? newState.markwhen?.parsed?.[0].tags[ourTags[0]]
+                ? newState.app?.colorMap?.[ourTags[0]]
                 : undefined;
             };
 

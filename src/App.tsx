@@ -74,7 +74,7 @@ function App() {
   return (
     <div className={`h-full w-full ${dark ? "dark" : ""}`}>
       <div
-        className={`h-full w-full dark:bg-slate-800 dark:text-slate-100 text-slate-900 bg-slate-50 calendar-container`}
+        className={`h-full w-full dark:bg-slate-800 dark:text-slate-100 text-slate-900 bg-white calendar-container`}
       >
         <FullCalendar
           ref={calendarRef}
