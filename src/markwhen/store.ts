@@ -40,9 +40,7 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
               const ourTags = isEventNode(node)
                 ? node.value.eventDescription.tags
                 : node.tags;
-              return ourTags
-                ? newState.app?.colorMap?.[ourTags[0]]
-                : undefined;
+              return ourTags ? newState.app?.colorMap?.[ourTags[0]] : undefined;
             };
 
             let events = [] as EventInput[];
@@ -52,13 +50,13 @@ export const useStore = create<State & Actions & { events?: EventInput[] }>(
                 if (isEventNode(node)) {
                   const color = eventColor(node) || "31, 32, 35";
                   const hovering = equivalentPaths(
-                    newState.app?.hoveringPath?.pageFiltered,
-                    { type: "pageFiltered", path }
+                    newState.app?.hoveringPath,
+                    path
                   );
-                  const detail = equivalentPaths(newState.app?.detailPath, {
-                    type: "pageFiltered",
-                    path,
-                  });
+                  const detail = equivalentPaths(
+                    newState.app?.detailPath,
+                    path
+                  );
                   const dark = newState.app?.isDark;
                   events.push({
                     id: path.join(","),

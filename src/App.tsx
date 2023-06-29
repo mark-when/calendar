@@ -44,19 +44,13 @@ function App() {
   }, []);
 
   const mouseEnter = (e: EventHoveringArg) =>
-    setHoveringPath({
-      type: "pageFiltered",
-      path: e.event.id.split(",").map((i) => parseInt(i)),
-    });
+    setHoveringPath(e.event.id.split(",").map((i) => parseInt(i)));
 
   const mouseLeave = () => {
     setHoveringPath();
   };
   const eventClick = (e: EventClickArg) => {
-    const path = {
-      type: "pageFiltered",
-      path: e.event.id.split(",").map((i) => parseInt(i)),
-    } as EventPath;
+    const path = e.event.id.split(",").map((i) => parseInt(i)) as EventPath;
     setDetailPath(path);
     showInEditor(path);
   };
