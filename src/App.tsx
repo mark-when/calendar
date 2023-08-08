@@ -9,12 +9,10 @@ import {
   DateSelectArg,
 } from "@fullcalendar/core";
 import "./App.css";
-import { createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect } from "react";
 import { EventPath } from "@markwhen/view-client/dist/paths";
 import shallow from "zustand/shallow";
 
-const eqPath = (p1?: number[], p2?: number[]) =>
-  !!p1 && p2 && p1.join(",") === p2.join(",");
 function App() {
   const [
     requestStateUpdate,
@@ -35,7 +33,7 @@ function App() {
     (a, b) => true
   );
 
-  const dark = useStore((s) => s.app?.isDark);
+  const dark = useStore((s) => s.appState?.isDark);
   const events = useStore((s) => s.events, shallow);
 
   useEffect(() => {
