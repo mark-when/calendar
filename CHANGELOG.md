@@ -1,3 +1,6 @@
+## 1.2.0
+- Bump markwhen/view-client
+
 ## 1.1.0 
 - Bump markwhen/view-client
 
