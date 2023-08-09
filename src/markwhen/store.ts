@@ -37,7 +37,6 @@ export const useStore = create<{
         };
         let events = [] as EventInput[];
         const transformed = s?.markwhenState?.transformed;
-        console.log(transformed);
         if (transformed) {
           for (const { node, path } of iterate(transformed)) {
             if (isEventNode(node)) {
