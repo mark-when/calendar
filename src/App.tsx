@@ -7,6 +7,7 @@ import {
   EventHoveringArg,
   EventClickArg,
   DateSelectArg,
+  DayCellContentArg,
 } from "@fullcalendar/core";
 import "./App.css";
 import { createRef, useEffect } from "react";
@@ -62,12 +63,12 @@ function App() {
     calendarRef.current!.getApi().unselect();
   };
 
-  const dayCellClassNames = (dc) => {
+  const dayCellClassNames = (dc: DayCellContentArg) => {
     const classes = [];
     const dt = DateTime.fromJSDate(dc.date);
     if (dt.day < 8) {
       if (dt.day === 1) {
-        classes.push('firstDayOfMonth')
+        classes.push("firstDayOfMonth");
       }
       classes.push("firstWeekOfMonth");
     }
@@ -94,7 +95,7 @@ function App() {
             right: "dayGridYear,timeGridWeek,timeGridDay",
           }}
           buttonText={{
-            'year': 'Month'
+            year: "Month",
           }}
           events={events}
           eventMouseEnter={mouseEnter}

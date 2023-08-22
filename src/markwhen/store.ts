@@ -35,6 +35,7 @@ export const useStore = create<{
             ? node.value.eventDescription.tags
             : node.tags;
           return ourTags
+            // @ts-ignore
             ? newState?.colorMap?.[node.source || "default"][ourTags[0]]
             : undefined;
         };
