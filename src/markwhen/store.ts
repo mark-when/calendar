@@ -72,7 +72,6 @@ export const useStore = create<{
             }
           }
         }
-        console.log(events.map(e => e.borderColor))
         return {
           appState: newState,
           ...(transformed ? { events } : {}),
