@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Update deps, scrolling month view and better all day event support
+
 ## 1.2.0
 - Bump markwhen/view-client
 

@@ -56,7 +56,6 @@ export const useStore = create<{
                 node.value.dateRangeIso.toDateTimeIso
               );
               const allDay = to.diff(from).as("day") > 1;
-              console.log(hovering)
               events.push({
                 id: path.join(","),
                 start: node.value.dateRangeIso.fromDateTimeIso,
