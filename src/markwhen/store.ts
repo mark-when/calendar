@@ -1,10 +1,11 @@
-import create from "zustand";
+import { create } from "zustand";
 import { AppState, MarkwhenState, useLpc } from "@markwhen/view-client";
 import { equivalentPaths, EventPath } from "@markwhen/view-client/dist/paths";
 import { DateRangeIso, DateTimeGranularity } from "@markwhen/parser/lib/Types";
 import { EventInput } from "@fullcalendar/core";
 import { SomeNode } from "@markwhen/parser/lib/Node";
 import { isEventNode, iterate } from "@markwhen/parser/lib/Noder";
+import { DateTime } from "luxon";
 
 export const useStore = create<{
   appState: AppState;
@@ -33,7 +34,9 @@ export const useStore = create<{
           const ourTags = isEventNode(node)
             ? node.value.eventDescription.tags
             : node.tags;
-          return ourTags ? newState?.colorMap?.[ourTags[0]] : undefined;
+          return ourTags
+            ? newState?.colorMap?.[node.source || "default"][ourTags[0]]
+            : undefined;
         };
         let events = [] as EventInput[];
         const transformed = s?.markwhenState?.transformed;
@@ -41,9 +44,18 @@ export const useStore = create<{
           for (const { node, path } of iterate(transformed)) {
             if (isEventNode(node)) {
               const color = eventColor(node) || "31, 32, 35";
-              const hovering = equivalentPaths(newState?.hoveringPath, path);
-              const detail = equivalentPaths(newState?.detailPath, path);
+              const hovering =
+                newState?.hoveringPath?.join(",") === path.join(",");
+              const detail = newState?.detailPath?.join(",") === path.join(",");
               const dark = newState?.isDark;
+              const from = DateTime.fromISO(
+                node.value.dateRangeIso.fromDateTimeIso
+              );
+              const to = DateTime.fromISO(
+                node.value.dateRangeIso.toDateTimeIso
+              );
+              const allDay = to.diff(from).as("day") > 1;
+              console.log(hovering)
               events.push({
                 id: path.join(","),
                 start: node.value.dateRangeIso.fromDateTimeIso,
@@ -52,18 +64,15 @@ export const useStore = create<{
                 backgroundColor: `rgba(${color}, ${
                   hovering || detail ? 0.95 : 0.8
                 })`,
+                allDay,
                 borderColor:
-                  hovering || detail
-                    ? dark
-                      ? "white"
-                      : "black"
-                    : `rgb(${color})`,
+                  hovering || detail ? (dark ? "white" : "black") : undefined,
                 dateText: node.value.dateText,
               });
             }
           }
         }
-
+        console.log(events.map(e => e.borderColor))
         return {
           appState: newState,
           ...(transformed ? { events } : {}),

@@ -11,7 +11,8 @@ import {
 import "./App.css";
 import { createRef, useEffect } from "react";
 import { EventPath } from "@markwhen/view-client/dist/paths";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
+import { DateTime } from "luxon";
 
 function App() {
   const [
@@ -61,6 +62,18 @@ function App() {
     calendarRef.current!.getApi().unselect();
   };
 
+  const dayCellClassNames = (dc) => {
+    const classes = [];
+    const dt = DateTime.fromJSDate(dc.date);
+    if (dt.day < 8) {
+      if (dt.day === 1) {
+        classes.push('firstDayOfMonth')
+      }
+      classes.push("firstWeekOfMonth");
+    }
+    return classes;
+  };
+
   const calendarRef = createRef<FullCalendar>();
 
   return (
@@ -72,20 +85,24 @@ function App() {
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
           editable={true}
-          initialView={"dayGridMonth"}
+          initialView={"dayGridYear"}
           height={"100%"}
           windowResizeDelay={0}
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "dayGridYear,timeGridWeek,timeGridDay",
+          }}
+          buttonText={{
+            'year': 'Month'
           }}
           events={events}
           eventMouseEnter={mouseEnter}
           eventMouseLeave={mouseLeave}
           eventClick={eventClick}
-          eventClassNames={"cursor-pointer"}
+          eventClassNames={["cursor-pointer"]}
           // dateClick={dateClick}
+          dayCellClassNames={dayCellClassNames}
           selectable={true}
           select={select}
         />
