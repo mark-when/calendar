@@ -1,3 +1,7 @@
+## 1.3.2
+
+- Bump parser and view client
+
 ## 1.3.1
 
 - Remove extraneous logging

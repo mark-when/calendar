@@ -1,10 +1,14 @@
 import { create } from "zustand";
 import { AppState, MarkwhenState, useLpc } from "@markwhen/view-client";
 import { equivalentPaths, EventPath } from "@markwhen/view-client/dist/paths";
-import { DateRangeIso, DateTimeGranularity } from "@markwhen/parser/lib/Types";
+import {
+  DateRangeIso,
+  DateTimeGranularity,
+  isEventNode,
+  iterate,
+  SomeNode,
+} from "@markwhen/parser";
 import { EventInput } from "@fullcalendar/core";
-import { SomeNode } from "@markwhen/parser/lib/Node";
-import { isEventNode, iterate } from "@markwhen/parser/lib/Noder";
 import { DateTime } from "luxon";
 
 export const useStore = create<{
@@ -35,8 +39,8 @@ export const useStore = create<{
             ? node.value.eventDescription.tags
             : node.tags;
           return ourTags
-            // @ts-ignore
-            ? newState?.colorMap?.[node.source || "default"][ourTags[0]]
+            ? // @ts-ignore
+              newState?.colorMap?.[node.source || "default"][ourTags[0]]
             : undefined;
         };
         let events = [] as EventInput[];
