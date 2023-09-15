@@ -1,3 +1,7 @@
+## 1.3.3
+
+- Rebuild and redeploy
+
 ## 1.3.2
 
 - Bump parser and view client
