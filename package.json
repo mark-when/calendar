@@ -8,30 +8,30 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.9",
-    "@fullcalendar/daygrid": "^6.1.9",
-    "@fullcalendar/interaction": "^6.1.9",
-    "@fullcalendar/multimonth": "^6.1.9",
-    "@fullcalendar/react": "^6.1.9",
-    "@fullcalendar/timegrid": "^6.1.9",
-    "@markwhen/parser": "^0.10.14",
-    "@markwhen/view-client": "^1.4.3",
-    "immer": "^10.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "zustand": "^4.4.1"
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/multimonth": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@markwhen/parser": "^0.12.0-beta.4",
+    "@markwhen/view-client": "^1.5.0-beta.1",
+    "immer": "^10.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@types/luxon": "^3.3.1",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
-    "@vitejs/plugin-react": "^4.0.4",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.28",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^4.6.4",
-    "vite": "^4.4.9",
-    "vite-plugin-singlefile": "^0.13.3"
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8",
+    "vite-plugin-singlefile": "^2.0.2"
   },
   "files": [
     "dist/index.html"

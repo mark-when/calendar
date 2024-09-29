@@ -4,9 +4,9 @@ import { equivalentPaths, EventPath } from "@markwhen/view-client/dist/paths";
 import {
   DateRangeIso,
   DateTimeGranularity,
-  isEventNode,
-  iterate,
-  SomeNode,
+  Eventy,
+  isEvent,
+  iter,
 } from "@markwhen/parser";
 import { EventInput } from "@fullcalendar/core";
 import { DateTime } from "luxon";
@@ -26,7 +26,8 @@ export const useStore = create<{
     colorMap: { default: {} },
   };
   let markwhenState: MarkwhenState = {
-    parsed: [],
+    // @ts-ignore
+    parsed: {},
     transformed: undefined,
   };
   let events = [] as EventInput[];
@@ -34,10 +35,8 @@ export const useStore = create<{
   const { postRequest } = useLpc({
     appState(newState) {
       set((s) => {
-        const eventColor = (node: SomeNode) => {
-          const ourTags = isEventNode(node)
-            ? node.value.eventDescription.tags
-            : node.tags;
+        const eventColor = (node: Eventy) => {
+          const ourTags = node.tags;
           return ourTags
             ? // @ts-ignore
               newState?.colorMap?.[node.source || "default"][ourTags[0]]
@@ -46,32 +45,30 @@ export const useStore = create<{
         let events = [] as EventInput[];
         const transformed = s?.markwhenState?.transformed;
         if (transformed) {
-          for (const { node, path } of iterate(transformed)) {
-            if (isEventNode(node)) {
-              const color = eventColor(node) || "31, 32, 35";
+          for (const { eventy, path } of iter(transformed)) {
+            if (isEvent(eventy)) {
+              const color = eventColor(eventy) || "31, 32, 35";
               const hovering =
                 newState?.hoveringPath?.join(",") === path.join(",");
               const detail = newState?.detailPath?.join(",") === path.join(",");
               const dark = newState?.isDark;
               const from = DateTime.fromISO(
-                node.value.dateRangeIso.fromDateTimeIso
+                eventy.dateRangeIso.fromDateTimeIso
               );
-              const to = DateTime.fromISO(
-                node.value.dateRangeIso.toDateTimeIso
-              );
+              const to = DateTime.fromISO(eventy.dateRangeIso.toDateTimeIso);
               const allDay = to.diff(from).as("day") > 1;
               events.push({
                 id: path.join(","),
-                start: node.value.dateRangeIso.fromDateTimeIso,
-                end: node.value.dateRangeIso.toDateTimeIso,
-                title: `${node.value.eventDescription.eventDescription}`,
+                start: eventy.dateRangeIso.fromDateTimeIso,
+                end: eventy.dateRangeIso.toDateTimeIso,
+                title: `${eventy.firstLine.restTrimmed}`,
                 backgroundColor: `rgba(${color}, ${
                   hovering || detail ? 0.95 : 0.8
                 })`,
                 allDay,
                 borderColor:
                   hovering || detail ? (dark ? "white" : "black") : undefined,
-                dateText: node.value.dateText,
+                dateText: eventy.firstLine.datePart,
               });
             }
           }
@@ -84,10 +81,8 @@ export const useStore = create<{
     },
     markwhenState: (newState) => {
       set((oldState) => {
-        const eventColor = (node: SomeNode) => {
-          const ourTags = isEventNode(node)
-            ? node.value.eventDescription.tags
-            : node.tags;
+        const eventColor = (eventy: Eventy) => {
+          const ourTags = eventy.tags;
           return ourTags
             ? oldState.appState?.colorMap?.[ourTags[0]]
             : undefined;
@@ -96,9 +91,9 @@ export const useStore = create<{
         let events = [] as EventInput[];
         const transformed = newState?.transformed;
         if (transformed) {
-          for (const { node, path } of iterate(transformed)) {
-            if (isEventNode(node)) {
-              const color = eventColor(node) || "31, 32, 35";
+          for (const { eventy, path } of iter(transformed)) {
+            if (isEvent(eventy)) {
+              const color = eventColor(eventy) || "31, 32, 35";
               const hovering = equivalentPaths(
                 oldState.appState?.hoveringPath,
                 path
@@ -110,9 +105,9 @@ export const useStore = create<{
               const dark = oldState.appState?.isDark;
               events.push({
                 id: path.join(","),
-                start: node.value.dateRangeIso.fromDateTimeIso,
-                end: node.value.dateRangeIso.toDateTimeIso,
-                title: `${node.value.eventDescription.eventDescription}`,
+                start: eventy.dateRangeIso.fromDateTimeIso,
+                end: eventy.dateRangeIso.toDateTimeIso,
+                title: `${eventy.firstLine.restTrimmed}`,
                 backgroundColor: `rgba(${color}, ${
                   hovering || detail ? 0.95 : 0.8
                 })`,
@@ -122,7 +117,7 @@ export const useStore = create<{
                       ? "white"
                       : "black"
                     : `rgb(${color})`,
-                dateText: node.value.dateText,
+                dateText: eventy.firstLine.datePart,
               });
             }
           }
@@ -178,7 +173,7 @@ export const useStore = create<{
 //         produce(stateAndTransformedEvents, (s) => {
 //           const eventColor = (node: SomeNode) => {
 //             const ourTags = isEventNode(node)
-//               ? node.value.eventDescription.tags
+//               ? eventy.eventDescription.tags
 //               : node.tags;
 //             return ourTags
 //               ? newState.markwhen?.page?.parsed?.tags[ourTags[0]]
@@ -199,9 +194,9 @@ export const useStore = create<{
 //                 const dark = newState.app?.isDark;
 //                 events.push({
 //                   id: path.join(","),
-//                   start: node.value.dateRangeIso.fromDateTimeIso,
-//                   end: node.value.dateRangeIso.toDateTimeIso,
-//                   title: `${node.value.eventDescription.eventDescription}`,
+//                   start: eventy.dateRangeIso.fromDateTimeIso,
+//                   end: eventy.dateRangeIso.toDateTimeIso,
+//                   title: `${eventy.eventDescription.eventDescription}`,
 //                   // backgroundColor: `rgba(${color}, ${
 //                   //   hovering || detail ? 0.95 : 0.8
 //                   // })`,
@@ -211,7 +206,7 @@ export const useStore = create<{
 //                   //       ? "white"
 //                   //       : "black"
 //                   //     : `rgb(${color})`,
-//                   dateText: node.value.dateText,
+//                   dateText: eventy.dateText,
 //                 });
 //               }
 //             }

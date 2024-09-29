@@ -24,11 +24,11 @@
 }
 
 .firstDayOfMonth {
-  @apply border-l-2 border-l-slate-400 !important;
+  @apply border-l-2 border-l-zinc-400 !important;
 }
 
 .firstWeekOfMonth {
-  @apply border-t-2 border-t-slate-400 !important
+  @apply border-t-2 border-t-zinc-400 !important
 }
 
 .fc-button {
@@ -40,7 +40,7 @@
 }
 
 .fc-day-sat, .fc-day-sun {
-  @apply bg-slate-100 dark:bg-slate-700 !important;
+  @apply bg-zinc-100 dark:bg-zinc-700 !important;
 }
 
 .fc-day-today .fc-daygrid-day-top {

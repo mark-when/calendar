@@ -12,7 +12,7 @@ import {
 import "./App.css";
 import { createRef, useEffect } from "react";
 import { EventPath } from "@markwhen/view-client/dist/paths";
-import { shallow } from "zustand/shallow";
+import { shallow, useShallow } from "zustand/shallow";
 import { DateTime } from "luxon";
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
     showInEditor,
     newEvent,
   ] = useStore(
-    (s) => {
+    useShallow((s) => {
       return [
         s.requestStateUpdate,
         s.setHoveringPath,
@@ -31,12 +31,11 @@ function App() {
         s.showInEditor,
         s.newEvent,
       ];
-    },
-    (a, b) => true
+    })
   );
 
   const dark = useStore((s) => s.appState?.isDark);
-  const events = useStore((s) => s.events, shallow);
+  const events = useStore((s) => s.events);
 
   useEffect(() => {
     // We only want an initial update, we do not want to call this on every render
@@ -80,7 +79,7 @@ function App() {
   return (
     <div className={`h-full w-full ${dark ? "dark" : ""}`}>
       <div
-        className={`h-full w-full dark:bg-slate-800 dark:text-slate-100 text-slate-900 bg-white calendar-container`}
+        className={`h-full w-full dark:bg-zinc-800 dark:text-zinc-100 text-zinc-900 bg-white calendar-container`}
       >
         <FullCalendar
           ref={calendarRef}
