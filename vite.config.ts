@@ -6,9 +6,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 export default defineConfig({
   plugins: [react(), viteSingleFile()],
   server: {
-    headers: {
-      "cross-origin-resource-policy": "same-site",
-      "cross-origin-embedder-policy": "credentialless",
-    },
+    port: 6180,
+    host: "0.0.0.0",
   },
 });

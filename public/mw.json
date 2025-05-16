@@ -1,0 +1,8 @@
+{
+  "name": "Calendar",
+  "description": "Typical calendar. View by day, week, or month.",
+  "repo": "https://github.com/mark-when/calendar",
+  "iconSvgPath": "M 8 2 v 4 Z M 16 2 v 4 Z M 3 10 h 18 Z M 8 14 h 0.01 Z M 12 14 h 0.01 Z M 16 14 h 0.01 Z M 8 18 h 0.01 Z M 12 18 h 0 M 16 18 H 16 Z M 3 5 Z Q 3 4 4 4 L 20 4 Q 21 4 21 5 L 21 21 Q 21 22 20 22 L 4 22 Q 3 22 3 21 Z",
+  "screenshots": ["/calendar1.png", "/calendar2.png"],
+  "by": "markwhen"
+}
