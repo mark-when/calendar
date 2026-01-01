@@ -32,31 +32,42 @@ export const useStore = create<{
   };
   let events = [] as EventInput[];
 
+  const eventColor = (state: AppState | undefined, eventy: Eventy) => {
+    const tags = eventy.tags;
+    const source = (eventy as { source?: string })?.source || "default";
+    if (!tags?.length) return undefined;
+    return state?.colorMap?.[source]?.[tags[0]];
+  };
+
+  const isAllDay = (fromIso: string, toIso: string) => {
+    const from = DateTime.fromISO(fromIso);
+    const to = DateTime.fromISO(toIso);
+    if (!from.isValid || !to.isValid) return false;
+    // Treat events that end exactly at midnight after the start as all-day
+    const durationMs = to.toMillis() - from.toMillis();
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    const crossesMidnight = to.startOf("day").equals(to);
+    return durationMs >= oneDayMs || crossesMidnight;
+  };
+
   const { postRequest } = useLpc({
     appState(newState) {
       set((s) => {
-        const eventColor = (node: Eventy) => {
-          const ourTags = node.tags;
-          return ourTags
-            ? // @ts-ignore
-              newState?.colorMap?.[node.source || "default"][ourTags[0]]
-            : undefined;
-        };
+        const colorForEvent = (node: Eventy) => eventColor(newState, node);
         let events = [] as EventInput[];
         const transformed = s?.markwhenState?.transformed;
         if (transformed) {
           for (const { eventy, path } of iter(transformed)) {
             if (isEvent(eventy)) {
-              const color = eventColor(eventy) || "31, 32, 35";
+              const color = colorForEvent(eventy) || "31, 32, 35";
               const hovering =
                 newState?.hoveringPath?.join(",") === path.join(",");
               const detail = newState?.detailPath?.join(",") === path.join(",");
               const dark = newState?.isDark;
-              const from = DateTime.fromISO(
-                eventy.dateRangeIso.fromDateTimeIso
+              const allDay = isAllDay(
+                eventy.dateRangeIso.fromDateTimeIso,
+                eventy.dateRangeIso.toDateTimeIso
               );
-              const to = DateTime.fromISO(eventy.dateRangeIso.toDateTimeIso);
-              const allDay = to.diff(from).as("day") > 1;
               events.push({
                 id: path.join(","),
                 start: eventy.dateRangeIso.fromDateTimeIso,
@@ -81,19 +92,13 @@ export const useStore = create<{
     },
     markwhenState: (newState) => {
       set((oldState) => {
-        const eventColor = (eventy: Eventy) => {
-          const ourTags = eventy.tags;
-          return ourTags
-            ? oldState.appState?.colorMap?.[ourTags[0]]
-            : undefined;
-        };
-
         let events = [] as EventInput[];
         const transformed = newState?.transformed;
         if (transformed) {
           for (const { eventy, path } of iter(transformed)) {
             if (isEvent(eventy)) {
-              const color = eventColor(eventy) || "31, 32, 35";
+              const color = eventColor(oldState.appState, eventy) ||
+                "31, 32, 35";
               const hovering = equivalentPaths(
                 oldState.appState?.hoveringPath,
                 path
@@ -117,6 +122,10 @@ export const useStore = create<{
                       ? "white"
                       : "black"
                     : `rgb(${color})`,
+                allDay: isAllDay(
+                  eventy.dateRangeIso.fromDateTimeIso,
+                  eventy.dateRangeIso.toDateTimeIso
+                ),
                 dateText: eventy.firstLine.datePart,
               });
             }

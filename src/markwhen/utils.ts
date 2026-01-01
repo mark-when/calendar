@@ -1,20 +1,23 @@
 import { LINK_REGEX, AT_REGEX } from "@markwhen/parser/lib/Types";
-export function toInnerHtml(s: string): string {
-  return s
-    .replace(/<|>/g, (match) => {
-      if (match === "<") {
-        return "<span><</span>";
-      }
-      return "<span>></span>";
-    })
-    .replace(LINK_REGEX, (substring, linkText, link) => {
-      return `<a class="underline" href="${addHttpIfNeeded(
-        link
-      )}">${linkText}</a>`;
-    })
+
+const escapeHtml = (s: string): string =>
+  s
     .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+export function toInnerHtml(s: string): string {
+  return escapeHtml(s)
+    .replace(LINK_REGEX, (substring, linkText, link) => {
+      return `<a class="underline" href="${escapeHtml(
+        addHttpIfNeeded(link)
+      )}">${escapeHtml(linkText)}</a>`;
+    })
     .replace(AT_REGEX, (substring, at) => {
-      return `<a class="underline" href="/${at}">@${at}</a>`;
+      const safe = escapeHtml(at);
+      return `<a class="underline" href="/${safe}">@${safe}</a>`;
     });
 }
 

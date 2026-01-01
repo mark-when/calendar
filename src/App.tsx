@@ -10,7 +10,7 @@ import {
   DayCellContentArg,
 } from "@fullcalendar/core";
 import "./App.css";
-import { createRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { EventPath } from "@markwhen/view-client/dist/paths";
 import { shallow, useShallow } from "zustand/shallow";
 import { DateTime } from "luxon";
@@ -59,7 +59,7 @@ function App() {
       { fromDateTimeIso: selection.startStr, toDateTimeIso: selection.endStr },
       false
     );
-    calendarRef.current!.getApi().unselect();
+    calendarRef.current?.getApi().unselect();
   };
 
   const dayCellClassNames = (dc: DayCellContentArg) => {
@@ -74,7 +74,7 @@ function App() {
     return classes;
   };
 
-  const calendarRef = createRef<FullCalendar>();
+  const calendarRef = useRef<FullCalendar>(null);
 
   return (
     <div className={`h-full w-full ${dark ? "dark" : ""}`}>
