@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "packages": {
+    "@markwhen/parser": {
+      "signature": "7be4f29667a31310bc14497ebd3e9362",
+      "file": true,
+      "replaced": "^1.0.1"
+    },
+    "@markwhen/view-client": {
+      "signature": "1b2f3642c7e7deddebf64db232f9438f",
+      "file": true,
+      "replaced": "^1.5.3"
+    }
+  }
+}
