@@ -4,7 +4,7 @@
     "@markwhen/parser": {
       "signature": "7be4f29667a31310bc14497ebd3e9362",
       "file": true,
-      "replaced": "^1.0.1"
+      "replaced": "^1.1.0"
     },
     "@markwhen/view-client": {
       "signature": "1b2f3642c7e7deddebf64db232f9438f",
